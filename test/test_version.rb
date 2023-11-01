@@ -1,4 +1,5 @@
 require File.expand_path(File.join(__dir__, 'case'))
+require 'racc/parser.rb'
 
 module Racc
   class TestVersion < TestCase
