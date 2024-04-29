@@ -108,6 +108,13 @@ module Racc
       assert_debugfile 'expect.y', [1,0,0,0,1]
     end
 
+    def test_expect_bang_y
+      assert_raise_with_message(Test::Unit::AssertionFailedError, /0 shift\/reduce conflicts are expected but 1 shift\/reduce conflicts exist/) {
+        assert_compile 'expect_bang.y'
+      }
+      assert_debugfile 'expect_bang.y', [1,0,0,0,0]
+    end
+
     def test_nullbug1_y
       assert_compile 'nullbug1.y'
       assert_debugfile 'nullbug1.y', [0,0,0,0]
