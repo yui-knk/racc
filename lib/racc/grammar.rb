@@ -27,6 +27,7 @@ module Racc
       @rules   = []  # :: [Rule]
       @start   = nil
       @n_expected_srconflicts = nil
+      @raise_unexpected_number_of_srconflicts = nil
       @prec_table = []
       @prec_table_closed = false
       @closed = false
@@ -36,6 +37,7 @@ module Racc
     attr_reader :start
     attr_reader :symboltable
     attr_accessor :n_expected_srconflicts
+    attr_accessor :raise_unexpected_number_of_srconflicts
 
     def [](x)
       @rules[x]
