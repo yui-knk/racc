@@ -73,17 +73,12 @@ module Racc
                     }\
                   | seq(:EXPECT, :DIGIT) {|_, num|
                       if @grammar.n_expected_srconflicts
-                        raise CompileError, "`expect and/or expect!' seen twice"
+                        raise CompileError, "`expect' seen twice"
                       end
                       @grammar.n_expected_srconflicts = num
-                      @grammar.raise_unexpected_number_of_srconflicts = false
                     }\
-                  | seq(:EXPECT!, :DIGIT) {|_, num|
-                      if @grammar.n_expected_srconflicts
-                        raise CompileError, "`expect and/or expect!' seen twice"
-                      end
-                      @grammar.n_expected_srconflicts = num
-                      @grammar.raise_unexpected_number_of_srconflicts = true
+                  | seq(:ERROR_ON_EXPECT_MISMATCH) {|*|
+                      @grammar.error_on_expect_mismatch = true
                     }
 
     g.convdef     = seq(:symbol, :STRING) {|sym, code|
@@ -447,7 +442,7 @@ module Racc
             break
           elsif /\A\/\*/ =~ @line
             skip_comment
-          elsif s = reads(/\A[a-zA-Z_]\w*!?/)
+          elsif s = reads(/\A[a-zA-Z_]\w*/)
             yield [atom_symbol(s), s.intern]
           elsif s = reads(/\A\d+/)
             yield [:DIGIT, s.to_i]
@@ -501,7 +496,7 @@ module Racc
       'options'  => :OPTION,
       'start'    => :START,
       'expect'   => :EXPECT,
-      'expect!'  => :EXPECT!,
+      'error_on_expect_mismatch' => :ERROR_ON_EXPECT_MISMATCH,
       'class'    => :CLASS,
       'rule'     => :RULE,
       'end'      => :END
